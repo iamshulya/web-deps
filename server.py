@@ -18,16 +18,22 @@ def list_services(services_dir):
 def ping():
    return "pong"
 
-@web_deps.route("/list_s")
+@web_deps.route("/list_s") # Отображает список директорий в services_dir_env
 def list_s():
     return str(list_services(services_dir_env))
 
 
 @web_deps.route("/list_r")
 def list_r():
-    return str(list_services(services_dir_env + list_services(services_dir_env)[0] + '/'))
+    service_dir = flask.request.args.to_dict()['service_dir']
+    return str(list_services(services_dir_env + service_dir + '/releases/'))
 #ping()
 
+@web_deps.route("/add")
+def add():
+    user_id = flask.request.args.to_dict()['user_id']
+    print flask.request.args.to_dict()
+    return str(flask.request.args)
 
 
 if __name__ == "__main__":
