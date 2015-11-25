@@ -6,13 +6,28 @@ import json
 
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
+ROOT = '/vagrant/web-deps'
 
-web_deps = flask.Flask(__name__)
+web_deps = flask.Flask(__name__, static_folder=ROOT)
+
+@web_deps.route('/')
+@web_deps.route('/<path:path>')
+def send_static(path = False):
+    # Здесь мы посылаем всю статику клиенту - html, js скрипты, css стили
+    print 'Requested file path: {0}'.format(path)
+
+    if not path:
+            return web_deps.send_static_file('index.html')
+
+    return web_deps.send_static_file(path)
+
+
 
 def list_services(services_dir):
     sorted_release_folder = [dirs for dirs in os.listdir(services_dir) if os.path.isdir(os.path.join(services_dir, dirs))] # Отображает только директории
     sorted_release_folder.sort()
     return sorted_release_folder
+
 
 @web_deps.route("/ping")
 def ping():
@@ -20,7 +35,7 @@ def ping():
 
 @web_deps.route("/list_s") # Отображает список директорий в services_dir_env
 def list_s():
-    return str(list_services(services_dir_env))
+    return json.dumps(list_services(services_dir_env))
 
 
 @web_deps.route("/list_r")
