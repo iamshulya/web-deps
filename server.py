@@ -38,11 +38,11 @@ def list_s():
     return json.dumps(list_services(services_dir_env))
 
 
-@web_deps.route("/list_r")
+@web_deps.route("/list_r") #Отображает список версий релизов из подпапки releases. Требует параметр service_dir.
 def list_r():
     service_dir = flask.request.args.to_dict()['service_dir']
-    return str(list_services(services_dir_env + service_dir + '/releases/'))
-#ping()
+    return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
+
 
 @web_deps.route("/add")
 def add():

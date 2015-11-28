@@ -8,34 +8,20 @@
  </head>
 <body>
 <h1>DEPS Page</h1>
-<table>
-  <tr>
-   <td>
-    <table id="data" class="table table-hover">
-     <tr>
-      <th>№</th>
-      <th>Сервис</th>
-    </tr>
-     <tr id="data1">
-      <td id="id">1</td>
-      <td id="service">Testuser</td>
-    </tr>
-    </table>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+<b>Выберите сервис</b>
 <script src="/jquery-1.11.2.js"></script>
 <script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
 $.getJSON('/list_s', function(data) {
  var items = [];
  $.each(data, function(key, val) {
-   items.push('<li id="' + key + '">' + val + '</li>');
+   items.push('<div class="radio"> <label>');
+   items.push('<input type="radio" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
+   items.push(val);
+   items.push('</label></div>');
  });
- $('<ul/>', {
-   'class': 'my-new-list',
+ $('<div/>', {
+  // 'class': '',
    html: items.join('')
  }).appendTo('body');
 });
