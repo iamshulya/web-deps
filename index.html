@@ -8,15 +8,18 @@
  </head>
 <body>
 <h1>DEPS Page</h1>
-<b>Выберите сервис</b>
+<b>Выберите сервис:</b>
 <script src="/jquery-1.11.2.js"></script>
 <script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
+var el = $(document);
+console.debug(el);
+
 $.getJSON('/list_s', function(data) {
  var items = [];
  $.each(data, function(key, val) {
    items.push('<div class="radio"> <label>');
-   items.push('<input type="radio" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
+   items.push('<input type="radio" class="serviceType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
    items.push(val);
    items.push('</label></div>');
  });
@@ -25,6 +28,40 @@ $.getJSON('/list_s', function(data) {
    html: items.join('')
  }).appendTo('body');
 });
+
+
+$(function(){
+  $(document).on('click', '.serviceType', function(){
+    $( ".releaseslist" ).remove();
+    if ($(this).is(':checked'))
+    {
+      $.getJSON('/list_r?service_dir=' + $(this).val(), function(data) {
+       var items = [];
+       items.push('<b>Выберите релиз:</b>')
+       $.each(data, function(key, val) {
+         items.push('<div class="radio"> <label>');
+         items.push('<input type="radio" class="releaseType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
+         items.push(val);
+         items.push('</label></div>');
+       });
+       $('<div/>', {
+         'class': 'releaseslist',
+         html: items.join('')
+       }).appendTo('body');
+      });
+    }
+  });
+});
+
+$(function(){
+  $(document).on('click', '.releaseType', function(){
+  if ($(this).is(':checked'))
+    {
+    alert('Hola')
+    }
+  });
+});
+
 
 </script>
 </body>
