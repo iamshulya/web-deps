@@ -12,6 +12,8 @@
 <script src="/jquery-1.11.2.js"></script>
 <script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
+var a = '';
+var b = '';
 var el = $(document);
 console.debug(el);
 
@@ -35,6 +37,7 @@ $(function(){
     $( ".releaseslist" ).remove();
     if ($(this).is(':checked'))
     {
+      a = $(this).val();
       $.getJSON('/list_r?service_dir=' + $(this).val(), function(data) {
        var items = [];
        items.push('<b>Выберите релиз:</b>')
@@ -57,7 +60,9 @@ $(function(){
   $(document).on('click', '.releaseType', function(){
   if ($(this).is(':checked'))
     {
-    alert('Hola')
+      b = $(this).val();
+      alert(a + '/ fab upload_to_server:release= '+ b);
+      //fab upload_to_server:release=20150725T115311
     }
   });
 });
