@@ -7,11 +7,12 @@
    </style>
  </head>
 <body>
-<h1>DEPS Page</h1>
-<b>Выберите сервис:</b>
+<h1>Сервис деплоя</h1>
+<b>1. Выберите сервис:</b>
 <script src="/jquery-1.11.2.js"></script>
 <script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
+
 var a = '';
 var b = '';
 var el = $(document);
@@ -40,7 +41,7 @@ $(function(){
       a = $(this).val();
       $.getJSON('/list_r?service_dir=' + $(this).val(), function(data) {
        var items = [];
-       items.push('<b>Выберите релиз:</b>')
+       items.push('<b>2. Выберите релиз:</b>')
        $.each(data, function(key, val) {
          items.push('<div class="radio"> <label>');
          items.push('<input type="radio" class="releaseType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
@@ -58,10 +59,16 @@ $(function(){
 
 $(function(){
   $(document).on('click', '.releaseType', function(){
+  $( ".result" ).remove();
   if ($(this).is(':checked'))
     {
       b = $(this).val();
-      alert(a + '/ fab upload_to_server:release= '+ b);
+      $.get('/web_do?service_dir=' + a + '&release_dir=' + b, function(data) {
+      $('<div/>', {
+        'class': 'result',
+        html: data
+      }).appendTo('body');
+      });
       //fab upload_to_server:release=20150725T115311
     }
   });

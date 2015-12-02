@@ -39,6 +39,7 @@ def remEmptyDir(path): # Удаляет пустые директории
 def f(s): # Тестовая функция дл вывода в консоль.
     print s
 
+@task(name='web-do')
 def upload_to_server(release):
     """#### Example: fab upload_to_server:release=20150725T115311 ####"""
     run('mkdir -p /var/local/releases')

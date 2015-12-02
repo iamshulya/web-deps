@@ -3,10 +3,13 @@
 import flask
 import os
 import json
+import subprocess
 
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
-ROOT = '/vagrant/web-deps'
+ROOT = '/vagrant/web-deps/'
+SERVICE_DIR_ENV_ABS = ROOT + services_dir_env
+
 
 web_deps = flask.Flask(__name__, static_folder=ROOT)
 
@@ -44,12 +47,16 @@ def list_r():
     return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
 
-@web_deps.route("/add")
-def add():
-    user_id = flask.request.args.to_dict()['user_id']
-    print flask.request.args.to_dict()
-    return str(flask.request.args)
-
+@web_deps.route("/web_do")
+def web_do():
+    service_dir = flask.request.args.to_dict()['service_dir']
+    release_dir = flask.request.args.to_dict()['release_dir']
+    #return json.dumps('cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir)
+    cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir
+    #return cmd
+    a=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    stdout,stderror=a.communicate()
+    return stdout
 
 if __name__ == "__main__":
    web_deps.run(host='0.0.0.0')
