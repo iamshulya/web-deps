@@ -64,9 +64,13 @@ $(function(){
     {
       b = $(this).val();
       $.get('/web_do?service_dir=' + a + '&release_dir=' + b, function(data) {
+	plainData = data.replace(/\t/g, '    ')
+           		.replace(/  /g, '&nbsp; ')
+           		.replace(/  /g, ' &nbsp;')
+			.replace(/\r\n|\n|\r/g, ' <br /> ');
       $('<div/>', {
         'class': 'result',
-        html: data
+        html: plainData
       }).appendTo('body');
       });
       //fab upload_to_server:release=20150725T115311
