@@ -46,6 +46,17 @@ def list_r():
     service_dir = flask.request.args.to_dict()['service_dir']
     return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
+@web_deps.route("/list_serverstodeploy") #Отображает список версий релизов из подпапки releases. Требует параметр service_dir.
+def list_r1():
+    service_dir = flask.request.args.to_dict()['service_dir']
+    file = open(SERVICE_DIR_ENV_ABS + service_dir + '/.serverstodeploy', 'r')
+    ln = file.readlines()
+    file.close()
+    ln = map(lambda s: s.strip(), ln)
+    #dict([ln])
+    return json.dumps(ln)
+    #return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
+
 
 @web_deps.route("/web_do")
 def web_do():
