@@ -46,7 +46,7 @@ def list_r():
     service_dir = flask.request.args.to_dict()['service_dir']
     return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
-@web_deps.route("/list_serverstodeploy") #Отображает список версий релизов из подпапки releases. Требует параметр service_dir.
+@web_deps.route("/list_serverstodeploy") #Отображает список серверов куда можно выложить данный релиз. Список серверов указывается в файле .serverstodeploy
 def list_r1():
     service_dir = flask.request.args.to_dict()['service_dir']
     file = open(SERVICE_DIR_ENV_ABS + service_dir + '/.serverstodeploy', 'r')
@@ -62,12 +62,13 @@ def list_r1():
 def web_do():
     service_dir = flask.request.args.to_dict()['service_dir']
     release_dir = flask.request.args.to_dict()['release_dir']
+    servers_to_deploy = flask.request.args.to_dict()['servers_to_deploy']
     #return json.dumps('cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir)
-    cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir
+    cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir + ' -H ' + servers_to_deploy
     #return cmd
     a=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout,stderror=a.communicate()
-    return stdout
+    return cmd + '\n' + stdout
 
 if __name__ == "__main__":
    web_deps.run(host='0.0.0.0')

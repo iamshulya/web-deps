@@ -70,7 +70,7 @@ $(function(){
       b = $(this).val();
       $.getJSON('/list_serverstodeploy?service_dir=' + a, function(data) {
        var items = [];
-       items.push('<b>2. Выберите сервера куда выложить релиз:</b>')
+       items.push('<b>2. Выберите сервер куда выложить релиз:</b>')
        $.each(data, function(key, val) {
          items.push('<div class="radio"> <label>');
          items.push('<input type="radio" class="serversToDeployType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
@@ -92,8 +92,8 @@ $(function(){
   $( ".result" ).remove();
   if ($(this).is(':checked'))
     {
-      //b = $(this).val();
-      $.get('/web_do?service_dir=' + a + '&release_dir=' + b, function(data) {
+      c = $(this).val();
+      $.get('/web_do?service_dir=' + a + '&release_dir=' + b, '&servers_to_deploy=' + c, function(data) {
         plainData = data.replace(/\t/g, '    ') // Заменяет символы перевода строки на html теги
                         .replace(/  /g, '&nbsp; ')
                         .replace(/  /g, ' &nbsp;')

@@ -9,7 +9,7 @@ postCommand = 'uptime'  # Команда выполняемая после за�
 service_root = '/service/jetty'
 local_releases_root = 'releases'
 env.user = 'deps'  # Пользователь
-env.hosts = ['tst-deps.msk.csat.ru']
+#env.hosts = ['tst-deps.msk.csat.ru']
 
 
 def mkdir_p(path):  # Создает директории на удаленной машине
