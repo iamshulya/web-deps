@@ -8,7 +8,7 @@
  </head>
 <body>
 <h1>Сервис деплоя</h1>
-<b>1. Выберите сервис:</b>
+
 <script src="/jquery-1.11.2.js"></script>
 <script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
@@ -21,6 +21,7 @@ console.debug(el);
 
 $.getJSON('/list_s', function(data) {
  var items = [];
+ items.push('<b>1. Выберите сервис:</b>')
  $.each(data, function(key, val) {
    items.push('<div class="radio"> <label>');
    items.push('<input type="radio" class="serviceType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
@@ -39,6 +40,8 @@ $(function(){
     $( ".releaseslist" ).remove();
     $( ".serversToDeploylist" ).remove();
     $( ".result" ).remove();
+    $( "#redbutton" ).remove();
+    $( "#cmd" ).remove();
     if ($(this).is(':checked'))
     {
       a = $(this).val();
@@ -65,6 +68,8 @@ $(function(){
   $(document).on('click', '.releaseType', function(){
     $( ".serversToDeploylist" ).remove();
     $( ".result" ).remove();
+    $( "#redbutton" ).remove();
+    $( "#cmd" ).remove();
     if ($(this).is(':checked'))
     {
       b = $(this).val();
@@ -89,24 +94,48 @@ $(function(){
 
 $(function(){
   $(document).on('click', '.serversToDeployType', function(){
+  $( "#redbutton" ).remove();
+  $( "#cmd" ).remove();
   $( ".result" ).remove();
   if ($(this).is(':checked'))
     {
       c = $(this).val();
-      $.get('/web_do?service_dir=' + a + '&release_dir=' + b, '&servers_to_deploy=' + c, function(data) {
-        plainData = data.replace(/\t/g, '    ') // Заменяет символы перевода строки на html теги
-                        .replace(/  /g, '&nbsp; ')
-                        .replace(/  /g, ' &nbsp;')
-                        .replace(/\r\n|\n|\r/g, '<br />');
-      $('<kbd/>', {
-        'class': 'result',
-        html:plainData
+      $('<p>', {
+        'id': 'cmd',
+        html:"Сервис <b>" + a + "</b>, релиз <b>" + b + "</b>, выложить на сервер <b>" + c + "</b>?<br/><br/>"
       }).appendTo('body');
-      });
-      //fab upload_to_server:release=20150725T115311
+      $('<button>', {
+        'class': 'btn btn-danger',
+        'type': 'submit',
+        'id': 'redbutton',
+        html:'Выложить релиз'
+      }).appendTo('body');
     }
   });
 });
+
+$(function(){
+  $(document).on('click', '#redbutton', function(){
+    $( ".result" ).remove();
+    $.get('/web_do?service_dir=' + a + '&release_dir=' + b, '&servers_to_deploy=' + c, function(data) {
+          plainData = data.replace(/\t/g, '    ') // Заменяет символы перевода строки на html теги
+                          .replace(/  /g, '&nbsp; ')
+                          .replace(/  /g, ' &nbsp;')
+                          .replace(/\r\n|\n|\r/g, '<br />');
+        $('<br/>', {
+        }).appendTo('body');
+        $('<br/>', {
+        }).appendTo('body');
+
+        $('<kbd/>', {
+          'class': 'result',
+          html:plainData
+        }).appendTo('body');
+        });
+    });
+  });
+
+
 
 
 </script>
