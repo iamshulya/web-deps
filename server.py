@@ -68,7 +68,7 @@ def web_do():
     #return cmd
     a=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout,stderror=a.communicate()
-    return cmd + '\n' + stdout
+    return cmd + '\n' + stdout + stderror
 
 if __name__ == "__main__":
    web_deps.run(host='0.0.0.0')
