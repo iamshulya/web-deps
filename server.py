@@ -7,6 +7,7 @@ import subprocess
 
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
+# Корневая директория сервиса
 ROOT = '/vagrant/web-deps/'
 SERVICE_DIR_ENV_ABS = ROOT + services_dir_env
 
@@ -53,7 +54,6 @@ def list_r1():
     ln = file.readlines()
     file.close()
     ln = map(lambda s: s.strip(), ln)
-    #dict([ln])
     return json.dumps(ln)
     #return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
