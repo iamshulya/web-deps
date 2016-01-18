@@ -59,17 +59,6 @@ def list_r1():
     #return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
 
-@web_deps.route("/web_do")
-def web_do():
-
-    #return json.dumps('cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir)
-    cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir + ' -H ' + servers_to_deploy
-    #return cmd
-    a=subprocess.Popen('sudo /etc/init.d/jetty start', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    stdout,stderror=a.communicate()
-    return cmd + '\n' + stdout + stderror
-
-
 @web_deps.route('/web-deps_int')
 def web_deps_int():
     service_dir = flask.request.args.to_dict()['service_dir']
