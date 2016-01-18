@@ -4,11 +4,13 @@ from menu import *
 from fabric.api import *
 from fabric.contrib.files import exists
 from os.path import join
-preCommand = 'uptime'  # Команда выполняемая перед заменой файлов
-postCommand = 'uptime'  # Команда выполняемая после замены файлов
+preCommand = 'sudo /etc/init.d/jetty stop'  # Команда выполняемая перед заменой файлов
+postCommand = 'sudo /etc/init.d/jetty start'  # Команда выполняемая после замены файлов
 service_root = '/service/jetty'
 local_releases_root = 'releases'
 env.user = 'deps'  # Пользователь
+env.key_filename = './id_rsa'
+
 #env.hosts = ['tst-deps.msk.csat.ru']
 
 

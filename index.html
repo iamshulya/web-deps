@@ -9,8 +9,8 @@
 <body>
 <h1>Сервис деплоя</h1>
 
-<script src="/jquery-1.11.2.js"></script>
-<script src="/jquery/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
+<script src="/jquery/jquery-1.11.2.js"></script>
+<script src="/bootstrap-3.3.4-dist/js/bootstrap.js"></script>
 <script>
 
 var a = '';
@@ -117,21 +117,23 @@ $(function(){
 $(function(){
   $(document).on('click', '#redbutton', function(){
     $( ".result" ).remove();
-    $.get('/web_do?service_dir=' + a + '&release_dir=' + b, '&servers_to_deploy=' + c, function(data) {
+    cmd = '/web-deps_int?service_dir=' + a + '&release_dir=' + b + '&servers_to_deploy=' + c
+  /*  $.get('/yield?service_dir=' + a + '&release_dir=' + b, '&servers_to_deploy=' + c, function(data) {
           plainData = data.replace(/\t/g, '    ') // Заменяет символы перевода строки на html теги
                           .replace(/  /g, '&nbsp; ')
                           .replace(/  /g, ' &nbsp;')
-                          .replace(/\r\n|\n|\r/g, '<br />');
+                          .replace(/\r\n|\n|\r/g, '<br />');*/
         $('<br/>', {
         }).appendTo('body');
         $('<br/>', {
         }).appendTo('body');
 
-        $('<kbd/>', {
-          'class': 'result',
-          html:plainData
+        $('<iframe/>', {
+          'src': cmd,
+          'style': 'width: 100%; height:500px;  border: 0px;',
+          //html:plainData
         }).appendTo('body');
-        });
+//        });
     });
   });
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import flask
+import time
 import os
 import json
 import subprocess
@@ -60,15 +61,34 @@ def list_r1():
 
 @web_deps.route("/web_do")
 def web_do():
-    service_dir = flask.request.args.to_dict()['service_dir']
-    release_dir = flask.request.args.to_dict()['release_dir']
-    servers_to_deploy = flask.request.args.to_dict()['servers_to_deploy']
+
     #return json.dumps('cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir)
     cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir + ' -H ' + servers_to_deploy
     #return cmd
-    a=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    a=subprocess.Popen('sudo /etc/init.d/jetty start', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout,stderror=a.communicate()
     return cmd + '\n' + stdout + stderror
+
+
+@web_deps.route('/web-deps_int')
+def web_deps_int():
+    service_dir = flask.request.args.to_dict()['service_dir']
+    release_dir = flask.request.args.to_dict()['release_dir']
+    servers_to_deploy = flask.request.args.to_dict()['servers_to_deploy']
+    cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab web-do:release=' + release_dir + ' -H ' + servers_to_deploy
+    def inner():
+        proc = subprocess.Popen(
+            [cmd],             #call something with a lot of output so we can see it
+            shell=True,
+            stdout=subprocess.PIPE
+#            stderr=subprocess.PIPE
+        )
+        #stdout,stderror=proc.communicate()
+        for line in iter(proc.stdout.readline,''):
+            time.sleep(1)                           # Don't need this just shows the text streaming
+            yield line.rstrip() + '<br/>'
+
+    return flask.Response(inner(), mimetype='text/html')
 
 if __name__ == "__main__":
    web_deps.run(host='0.0.0.0')
