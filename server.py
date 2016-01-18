@@ -9,7 +9,7 @@ import subprocess
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
 # Корневая директория сервиса
-ROOT = '/vagrant/web-deps/'
+ROOT = '/../web-deps/'
 SERVICE_DIR_ENV_ABS = ROOT + services_dir_env
 
 
@@ -77,7 +77,10 @@ def web_deps_int():
             time.sleep(1)                           # Don't need this just shows the text streaming
             yield line.rstrip() + '<br/>'
 
-    return flask.Response(inner(), mimetype='text/html')
+    response = flask.Response(inner(), mimetype='text/html')
+    response.headers.add('X-Accel-Buffering', 'no')
+    return response
+
 
 if __name__ == "__main__":
    web_deps.run(host='0.0.0.0')
