@@ -75,7 +75,7 @@ $(function(){
       b = $(this).val();
       $.getJSON('/list_serverstodeploy?service_dir=' + a, function(data) {
        var items = [];
-       items.push('<b>2. Выберите сервер куда выложить релиз:</b>')
+       items.push('<b>2. Выберите сервер куда выложить сборку:</b>')
        $.each(data, function(key, val) {
          items.push('<div class="radio"> <label>');
          items.push('<input type="radio" class="serversToDeployType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
