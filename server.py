@@ -8,8 +8,8 @@ import subprocess
 
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
-# Корневая директория сервиса
-ROOT = '/../web-deps/'
+# Укажите абсолютный путь к корневой директории сервиса!
+ROOT = ''
 SERVICE_DIR_ENV_ABS = ROOT + services_dir_env
 
 
