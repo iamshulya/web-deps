@@ -9,8 +9,11 @@ import subprocess
 # Директория с deps2.0 для сервисов
 services_dir_env = 'services/'
 # Укажите абсолютный путь к корневой директории сервиса!
-ROOT = ''
+ROOT = '/vagrant/web-deps/'
 SERVICE_DIR_ENV_ABS = ROOT + services_dir_env
+
+# Кол-во послених сборок отображаемых в вэб интерфейсе
+count_string = 15
 
 
 web_deps = flask.Flask(__name__, static_folder=ROOT)
@@ -28,10 +31,10 @@ def send_static(path = False):
 
 
 
-def list_services(services_dir):
+def list_services(services_dir,n):
     sorted_release_folder = [dirs for dirs in os.listdir(services_dir) if os.path.isdir(os.path.join(services_dir, dirs))] # Отображает только директории
     sorted_release_folder.sort()
-    return sorted_release_folder
+    return sorted_release_folder[-n:]
 
 
 @web_deps.route("/ping")
@@ -40,13 +43,13 @@ def ping():
 
 @web_deps.route("/list_s") # Отображает список директорий в services_dir_env
 def list_s():
-    return json.dumps(list_services(services_dir_env))
+    return json.dumps(list_services(services_dir_env,0))
 
 
 @web_deps.route("/list_r") #Отображает список версий релизов из подпапки releases. Требует параметр service_dir.
 def list_r():
     service_dir = flask.request.args.to_dict()['service_dir']
-    return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
+    return json.dumps(list_services(services_dir_env + service_dir + '/releases/', count_string))
 
 @web_deps.route("/list_serverstodeploy") #Отображает список серверов куда можно выложить данный релиз. Список серверов указывается в файле .serverstodeploy
 def list_r1():
