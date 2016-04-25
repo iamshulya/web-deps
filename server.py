@@ -43,13 +43,13 @@ def ping():
 
 @web_deps.route("/list_s") # Отображает список директорий в services_dir_env
 def list_s():
-    return json.dumps(list_services(services_dir_env,0))
+    return flask.jsonify(services=list_services(services_dir_env,0))
 
 
 @web_deps.route("/list_r") #Отображает список версий релизов из подпапки releases. Требует параметр service_dir.
 def list_r():
     service_dir = flask.request.args.to_dict()['service_dir']
-    return json.dumps(list_services(services_dir_env + service_dir + '/releases/', count_string))
+    return flask.jsonify(service_dir=service_dir, releases=list_services(services_dir_env + service_dir + '/releases/', count_string))
 
 @web_deps.route("/list_serverstodeploy") #Отображает список серверов куда можно выложить данный релиз. Список серверов указывается в файле .serverstodeploy
 def list_r1():
@@ -58,7 +58,7 @@ def list_r1():
     ln = file.readlines()
     file.close()
     ln = map(lambda s: s.strip(), ln)
-    return json.dumps(ln)
+    return flask.jsonify(service_dir=service_dir, serverstodeploy=ln)
     #return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
 
 

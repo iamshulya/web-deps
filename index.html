@@ -22,10 +22,10 @@ console.debug(el);
 $.getJSON('/list_s', function(data) {
  var items = [];
  items.push('<b>1. Выберите сервис:</b>')
- $.each(data, function(key, val) {
+ $.each(data.services, function(key,value) {
    items.push('<div class="radio"> <label>');
-   items.push('<input type="radio" class="serviceType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
-   items.push(val);
+   items.push('<input type="radio" class="serviceType" name="optionsRadios" id="optionsRadios' + key + '" value="' + value + '" >');
+   items.push(value);
    items.push('</label></div>');
  });
  $('<div/>', {
@@ -48,7 +48,7 @@ $(function(){
       $.getJSON('/list_r?service_dir=' + $(this).val(), function(data) {
        var items = [];
        items.push('<b>2. Выберите релиз:</b>')
-       $.each(data, function(key, val) {
+       $.each(data.releases, function(key, val) {
          items.push('<div class="radio"> <label>');
          items.push('<input type="radio" class="releaseType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
          items.push(val);
@@ -76,7 +76,7 @@ $(function(){
       $.getJSON('/list_serverstodeploy?service_dir=' + a, function(data) {
        var items = [];
        items.push('<b>2. Выберите сервер куда выложить сборку:</b>')
-       $.each(data, function(key, val) {
+       $.each(data.serverstodeploy, function(key, val) {
          items.push('<div class="radio"> <label>');
          items.push('<input type="radio" class="serversToDeployType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
          items.push(val);
