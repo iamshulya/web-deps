@@ -78,8 +78,8 @@ $(function(){
        items.push('<b>2. Выберите сервер куда выложить сборку:</b>')
        $.each(data.serverstodeploy, function(key, val) {
          items.push('<div class="radio"> <label>');
-         items.push('<input type="radio" class="serversToDeployType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val + '" >');
-         items.push(val);
+         items.push('<input type="radio" class="serversToDeployType" name="optionsRadios" id="optionsRadios' + key + '" value="' + val[0] + '" >');
+         items.push('<b>' + val[0] + '</b>, текущая версия ' + val[1]);
          items.push('</label></div>');
        });
        $('<div/>', {

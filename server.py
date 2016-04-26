@@ -52,14 +52,23 @@ def list_r():
     return flask.jsonify(service_dir=service_dir, releases=list_services(services_dir_env + service_dir + '/releases/', count_string))
 
 @web_deps.route("/list_serverstodeploy") #Отображает список серверов куда можно выложить данный релиз. Список серверов указывается в файле .serverstodeploy
-def list_r1():
+def list_std():
     service_dir = flask.request.args.to_dict()['service_dir']
     file = open(SERVICE_DIR_ENV_ABS + service_dir + '/.serverstodeploy', 'r')
-    ln = file.readlines()
+    ln_std = file.readlines()
     file.close()
-    ln = map(lambda s: s.strip(), ln)
-    return flask.jsonify(service_dir=service_dir, serverstodeploy=ln)
-    #return json.dumps(list_services(services_dir_env + service_dir + '/releases/'))
+    ln_std = map(lambda s: s.strip(), ln_std)
+    if os.path.exists(SERVICE_DIR_ENV_ABS + service_dir + '/.lastrelease'):
+        os.remove(SERVICE_DIR_ENV_ABS + service_dir + '/.lastrelease')
+    for line in ln_std:
+        cmd = 'cd ' + SERVICE_DIR_ENV_ABS + service_dir + ' && fab check_release_version -H ' + line
+        a=subprocess.Popen([cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        a.communicate()
+    file = open(SERVICE_DIR_ENV_ABS + service_dir + '/.lastrelease', 'r')
+    ln_lr = file.readlines()
+    file.close()
+    ln_lr = map(lambda s: s.strip(), ln_lr)
+    return flask.jsonify(serverstodeploy=zip(ln_std, ln_lr))
 
 
 @web_deps.route('/web-deps_int')
