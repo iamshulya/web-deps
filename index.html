@@ -4,9 +4,24 @@
    <link href="/static/bootstrap-3.3.4-dist/css/bootstrap.css" rel="stylesheet">
    <style>
     body { padding-top: 10px; padding-left: 30px; }
+    .spinner {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              margin-left: -50px; /* half width of the spinner gif */
+              margin-top: -50px; /* half height of the spinner gif */
+              text-align:center;
+              z-index:1234;
+              overflow: auto;
+              width: 100px; /* width of the spinner gif */
+              height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
+    }
    </style>
  </head>
 <body>
+  <div id="spinner" class="spinner" style="display:none;">
+    <img id="img-spinner" src="static/gif/spinner.gif" alt="Loading"/>
+  </div>
 <h1>Сервис деплоя</h1>
 
 <script src="/static/jquery/jquery-1.11.2.js"></script>
@@ -72,6 +87,7 @@ $(function(){
     $( "#cmd" ).remove();
     if ($(this).is(':checked'))
     {
+      $(".spinner").show();
       b = $(this).val();
       $.getJSON('/list_serverstodeploy?service_dir=' + a, function(data) {
        var items = [];
@@ -82,6 +98,7 @@ $(function(){
          items.push('<b>' + val[0] + '</b>, текущая версия ' + val[1]);
          items.push('</label></div>');
        });
+       $(".spinner").hide();
        $('<div/>', {
          'class': 'serversToDeploylist',
          html: items.join('')
